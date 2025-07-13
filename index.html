@@ -602,7 +602,7 @@ fetch("https://petfriendly-proxy-production.up.railway.app/datos_pet")
           Comentario: ${props.comentario || 'Sin comentarios'}
         `);
       }
-    }).addTo(mapa);
+    }).addTo(map);
 
     mapa.fitBounds(capa.getBounds());
   });
