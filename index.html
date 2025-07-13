@@ -21,7 +21,17 @@
             padding: 0;
             margin: 0;
         }
-    </style>
+    
+.info.legend {
+  background: white;
+  padding: 8px;
+  font: 12px/14px Arial, sans-serif;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  line-height: 1.4;
+}
+</style>
+
     <title></title>
 </head>
 
@@ -32,7 +42,21 @@
     <div id="map">
     </div>
 
-    <script src="js/qgis2web_expressions.js"></script>
+    <script src="js/qgis2web_expressions.js">
+const legend = L.control({ position: "bottomright" });
+
+legend.onAdd = function () {
+  const div = L.DomUtil.create("div", "info legend");
+  div.innerHTML += "<strong>Lugares Pet-Friendly</strong><br>";
+  div.innerHTML += '<i style=\"background: green; width: 10px; height: 10px; display: inline-block;\"></i> Parque<br>';
+  div.innerHTML += '<i style=\"background: orange; width: 10px; height: 10px; display: inline-block;\"></i> Refugio<br>';
+  div.innerHTML += '<i style=\"background: blue; width: 10px; height: 10px; display: inline-block;\"></i> Veterinaria<br>';
+  div.innerHTML += '<i style=\"background: red; width: 10px; height: 10px; display: inline-block;\"></i> Cafetería<br>';
+  return div;
+};
+
+legend.addTo(map);
+</script>
     <script src="js/leaflet.js"></script>
     <script src="js/L.Control.Layers.Tree.min.js"></script>
     <script src="js/leaflet.rotatedMarker.js"></script>
@@ -46,7 +70,6 @@
     <script src="data/Barrios_Bogota_Viviendas_1.js"></script>
     <script src="data/Parques_2.js"></script>
     <script src="data/ViasPrincipales_3.js"></script>
-    <script src="data/LugaresPetFriendly_4.js"></script>
     <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -164,7 +187,7 @@
             layer.on('popupopen', function (e) {
                 addClassToPopupIfMedia(content, e.popup);
             });
-            layer.bindPopup(content, { maxHeight: 400 });
+            //layer.bindPopup(content, { maxHeight: 400 });
         }
 
         function style_Barrios_Bogota_Viviendas_1_0() {
@@ -227,7 +250,7 @@
             layer.on('popupopen', function (e) {
                 addClassToPopupIfMedia(content, e.popup);
             });
-            layer.bindPopup(content, { maxHeight: 400 });
+            //layer.bindPopup(content, { maxHeight: 400 });
         }
 
         function style_Parques_2_0() {
@@ -290,7 +313,7 @@
             layer.on('popupopen', function (e) {
                 addClassToPopupIfMedia(content, e.popup);
             });
-            layer.bindPopup(content, { maxHeight: 400 });
+            //layer.bindPopup(content, { maxHeight: 400 });
         }
 
         function style_ViasPrincipales_3_0() {
@@ -320,6 +343,7 @@
         });
         bounds_group.addLayer(layer_ViasPrincipales_3);
         map.addLayer(layer_ViasPrincipales_3);
+        /*
         function pop_LugaresPetFriendly_4(feature, layer) {
             layer.on({
                 mouseout: function (e) {
@@ -457,28 +481,9 @@
                     break;
             }
         }
-        map.createPane('pane_LugaresPetFriendly_4');
-        map.getPane('pane_LugaresPetFriendly_4').style.zIndex = 404;
-        map.getPane('pane_LugaresPetFriendly_4').style['mix-blend-mode'] = 'normal';
-        var layer_LugaresPetFriendly_4 = new L.geoJson(json_LugaresPetFriendly_4, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_LugaresPetFriendly_4',
-            layerName: 'layer_LugaresPetFriendly_4',
-            pane: 'pane_LugaresPetFriendly_4',
-            onEachFeature: pop_LugaresPetFriendly_4,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.circleMarker(latlng, style_LugaresPetFriendly_4_0(feature));
-            },
-        });
-        bounds_group.addLayer(layer_LugaresPetFriendly_4);
-        map.addLayer(layer_LugaresPetFriendly_4);
+        */
         var overlaysTree = [
-            { label: 'Lugares PetFriendly<br /><table><tr><td style="text-align: center;"><img src="legend/LugaresPetFriendly_4_Parque0.png" /></td><td>Parque</td></tr><tr><td style="text-align: center;"><img src="legend/LugaresPetFriendly_4_Refugio1.png" /></td><td>Refugio</td></tr><tr><td style="text-align: center;"><img src="legend/LugaresPetFriendly_4_Veterinaria2.png" /></td><td>Veterinaria</td></tr></table>', layer: layer_LugaresPetFriendly_4 },
+            
             { label: '<img src="legend/ViasPrincipales_3.png" /> ViasPrincipales', layer: layer_ViasPrincipales_3 },
             { label: '<img src="legend/Parques_2.png" /> Parques', layer: layer_Parques_2 },
             { label: '<img src="legend/Barrios_Bogota_Viviendas_1.png" /> Barrios_Bogota_Viviendas', layer: layer_Barrios_Bogota_Viviendas_1 },
@@ -545,6 +550,8 @@
         });
         setBounds();
         var i = 0;
+
+        /*
         layer_LugaresPetFriendly_4.eachLayer(function (layer) {
             var context = {
                 feature: layer.feature,
@@ -557,15 +564,15 @@
             addLabel(layer, i);
             i++;
         });
-        resetLabels([layer_LugaresPetFriendly_4]);
+        */
         map.on("zoomend", function () {
-            resetLabels([layer_LugaresPetFriendly_4]);
+            
         });
         map.on("layeradd", function () {
-            resetLabels([layer_LugaresPetFriendly_4]);
+            
         });
         map.on("layerremove", function () {
-            resetLabels([layer_LugaresPetFriendly_4]);
+            
         });
     
   // URL del API público de KoboToolbox con los datos
@@ -575,6 +582,7 @@
     case "Veterinaria": return "blue";
     case "Parque": return "green";
     case "Refugio": return "orange";
+    case "Cafetería": return "red";
     default: return "gray";
   }
 }
@@ -609,5 +617,29 @@ fetch("https://petfriendly-proxy-production.up.railway.app/datos_pet")
 
 
 </script>
+
+    <div id="legend" style="position: absolute; bottom: 30px; left: 10px; background: white; padding: 10px; border: 1px solid #ccc; z-index: 1000;">
+      <div id="legend-header" style="cursor: pointer; font-weight: bold; margin-bottom: 5px;" onclick="toggleLegend()">Tipo de Lugar ▼</div>
+      <div id="legend-content">
+        <div><span style="background-color: blue; width: 12px; height: 12px; display: inline-block;"></span> Veterinaria</div>
+        <div><span style="background-color: green; width: 12px; height: 12px; display: inline-block;"></span> Parque</div>
+        <div><span style="background-color: orange; width: 12px; height: 12px; display: inline-block;"></span> Refugio</div>
+        <div><span style="background-color: red; width: 12px; height: 12px; display: inline-block;"></span> Cafetería</div>
+      </div>
+    </div>
+    <script>
+      function toggleLegend() {
+        const content = document.getElementById("legend-content");
+        const header = document.getElementById("legend-header");
+        if (content.style.display === "none") {
+          content.style.display = "block";
+          header.innerHTML = "Tipo de Lugar ▼";
+        } else {
+          content.style.display = "none";
+          header.innerHTML = "Tipo de Lugar ▲";
+        }
+      }
+    </script>
+
 </body>
 </html>
