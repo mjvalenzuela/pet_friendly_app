@@ -567,7 +567,28 @@
         map.on("layerremove", function () {
             resetLabels([layer_LugaresPetFriendly_4]);
         });
-    </script>
-</body>
+    
+  // URL del API público de KoboToolbox con tus datos
 
+  fetch("https://kc.kobotoolbox.org/api/v2/assets/aTwKQiKF5d4zkPjLitzA2w/data.geojson")
+    .then((response) => response.json())
+    .then((data) => {
+      L.geoJSON(data, {
+        onEachFeature: function (feature, layer) {
+          if (feature.properties && feature.properties.nombre_lugar) {
+            layer.bindPopup(
+              "<strong>" + feature.properties.nombre_lugar + "</strong><br>" +
+              feature.properties.tipo_lugar + "<br>" +
+              feature.properties.direccion
+            );
+          }
+        }
+      }).addTo(map);
+    })
+    .catch((error) => {
+      console.error("Error al cargar datos de KoboToolbox:", error);
+    });
+
+</script>
+</body>
 </html>
