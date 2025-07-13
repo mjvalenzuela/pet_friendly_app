@@ -570,7 +570,7 @@
     
   // URL del API público de KoboToolbox con tus datos
 
-  fetch("https://kc.kobotoolbox.org/api/v2/assets/aTwKQiKF5d4zkPjLitzA2w/data.geojson")
+  fetch("https://petfriendly-proxy-production.up.railway.app/datos_pet")
     .then((response) => response.json())
     .then((data) => {
       L.geoJSON(data, {
