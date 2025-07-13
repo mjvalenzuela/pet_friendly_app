@@ -568,26 +568,45 @@
             resetLabels([layer_LugaresPetFriendly_4]);
         });
     
-  // URL del API público de KoboToolbox con tus datos
+  // URL del API público de KoboToolbox con los datos
 
-  fetch("https://petfriendly-proxy-production.up.railway.app/datos_pet")
-    .then((response) => response.json())
-    .then((data) => {
-      L.geoJSON(data, {
-        onEachFeature: function (feature, layer) {
-          if (feature.properties && feature.properties.nombre_lugar) {
-            layer.bindPopup(
-              "<strong>" + feature.properties.nombre_lugar + "</strong><br>" +
-              feature.properties.tipo_lugar + "<br>" +
-              feature.properties.direccion
-            );
-          }
-        }
-      }).addTo(map);
-    })
-    .catch((error) => {
-      console.error("Error al cargar datos de KoboToolbox:", error);
-    });
+  function obtenerColor(tipo) {
+  switch (tipo) {
+    case "Veterinaria": return "blue";
+    case "Parque": return "green";
+    case "Refugio": return "orange";
+    default: return "gray";
+  }
+}
+
+fetch("https://petfriendly-proxy-production.up.railway.app/datos_pet")
+  .then(res => res.json())
+  .then(data => {
+    const capa = L.geoJSON(data, {
+      pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, {
+          radius: 8,
+          fillColor: obtenerColor(feature.properties.tipo_lugar),
+          color: "#000",
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.8
+        });
+      },
+      onEachFeature: function (feature, layer) {
+        const props = feature.properties;
+        layer.bindPopup(`
+          <strong>${props.nombre_lugar}</strong><br>
+          Tipo: ${props.tipo_lugar}<br>
+          Dirección: ${props.direccion}<br>
+          Comentario: ${props.comentario || 'Sin comentarios'}
+        `);
+      }
+    }).addTo(mapa);
+
+    mapa.fitBounds(capa.getBounds());
+  });
+
 
 </script>
 </body>
